@@ -6,7 +6,8 @@
     my, // The imaginary component in the complex plane
     mw, // The width (real)
     mh, // The height (imaginary)
-    max-iter  // The maximum number of iterations
+    max-iter, // The maximum number of iterations,
+    brightness
 ) = {
   import calc.log
   import calc.clamp
@@ -16,6 +17,8 @@
   let sy = mh / image-height;
   let log2 = log(2.0)
   let log2r = 1.0 / log2
+  let gain = 255 * brightness;
+  let mxr = 1.0 / max-iter
   for py in range(image-height) {
     for px in range(image-width) {
       // Map grid to complex plane
@@ -39,13 +42,13 @@
         let log_zn = log(rr) * 0.5;
         let nu = log(log_zn * log2r) * log2r;
         let smooth = i + 1 - nu;
-        let t = clamp(smooth / max-iter, 0.0, 1.0);
+        let t = clamp(smooth * mxr, 0.0, 1.0);
         let t2 = t * t
         let tn = 1-t
         let tn2 = tn * tn;
-        let r = clamp(int(9.0  * tn * t2 * t * 255), 0, 255)
-        let g = clamp(int(15.0 * tn2 * t2 * 255), 0, 255)
-        let b = clamp(int(8.5  * tn2 * tn * t * 255), 0, 255)
+        let r = clamp(int(9.0  * tn * t2 * t * gain), 0, 255)
+        let g = clamp(int(15.0 * tn2 * t2 * gain), 0, 255)
+        let b = clamp(int(8.5  * tn2 * tn * t * gain), 0, 255)
         pixels.push(r); pixels.push(g); pixels.push(b);
       }
     }
@@ -61,7 +64,8 @@
     w: 2.6,
     h: 2.6,
     width: 100%,
-    max-iter: 1024
+    max-iter: 1024,
+    brightness: 1.0
 ) = {
     image(
       mandelbrot-data(
@@ -71,7 +75,8 @@
         y,
         w,
         h,
-        max-iter
+        max-iter,
+        brightness
       ),
       format: (
         encoding: "rgb8", // REQUIRED: Must be "luma8", "lumaa8", "rgb8", or "rgba8"
