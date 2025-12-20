@@ -148,8 +148,8 @@
 
 #figure(
   make-image(
-      image-width: 800,
-      image-height: 400,
+      image-width: 512,
+      image-height:  256,
       width: 8cm
     ),
     caption: [ Harlow's method ]
