@@ -180,7 +180,7 @@ No carry → odd
 The point test in @harlow-fig-1 can be greatly simplified to
 #figure(
   $
-    "odd" = ((r & (n - r)) == 0);
+    "odd" = ((r "&" (n - r)) == 0);
   $,
   caption: [ Point test (fast) ]
 )
